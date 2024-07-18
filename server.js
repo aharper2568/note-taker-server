@@ -33,13 +33,13 @@ app.post('/api/notes', (req, res) => {
   const { title, text } = req.body;
   if (req.body) {
     const newNote = { id: uuidv4(), title, text };
-readAndAppend(newNote, './db/db.json')
-  } else{
-    res.error('error adding note')
+    readAndAppend(newNote, './db/db.json')
+      .then(() => res.json(newNote))
+      .catch((err) => res.status(500).send('Error adding note'));
+  } else {
+    res.status(400).send('Bad Request: Note data is missing');
   }
-  }
-
-);
+});
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
