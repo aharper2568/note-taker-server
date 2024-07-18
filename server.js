@@ -19,26 +19,29 @@ app.get('/notes', (req, res) => {
   res.sendFile(__dirname + '/public/notes.html');
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
 
 // API Route - Get all notes
 app.get('/api/notes', (req, res) => {
   console.info(`${req.method} request received for notes`);
-  readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
-});
-
-app.post('/api/notes', (req, res) => {
-  const { title, text } = req.body;
-  if (req.body) {
-    const newNote = { id: uuidv4(), title, text };
-    readAndAppend(newNote, './db/db.json')
-      .then(() => res.json(newNote))
-      .catch((err) => res.status(500).send('Error adding note'));
-  } else {
-    res.status(400).send('Bad Request: Note data is missing');
+  readFromFile('./db/db.json').then((data) => {
+    console.log(data)
+    res.json(JSON.parse(data))})
+  });
+  
+  app.post('/api/notes', (req, res) => {
+    const { title, text } = req.body;
+    if (req.body) {
+      const newNote = { id: uuidv4(), title, text };
+      readAndAppend(newNote, './db/db.json')
+    } else{
+      res.error('error adding note')
+    }
   }
+  
+);
+
+app.get('*', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
 });
 // Start the server
 app.listen(PORT, () => {
