@@ -23,18 +23,18 @@ app.get('/notes', (req, res) => {
 // API Route - Get all notes
 app.get('/api/notes', (req, res) => {
   console.info(`${req.method} request received for notes`); //confirm get method
-  readFromFile('./db/db.json').then((data) => {
-    console.log(data) 
+  readFromFile('./db/db.json').then((data) => { //read from json
+    console.log(data) //confirm data grabbed
     res.json(JSON.parse(data))})
   });
   
   app.post('/api/notes', (req, res) => {
-    console.info(`${req.method} request received for notes`);
-    const { title, text } = req.body;
-    if (req.body) { 
-      const newNote = { id: uuidv4(), title, text };
-      readAndAppend(newNote, './db/db.json');
-      readFromFile('./db/db.json').then((data)=> {
+    console.info(`${req.method} request received for notes`); //confirm post method
+    const { title, text } = req.body; //object deconstruction for req.body
+    if (req.body) { // if req.body exists
+      const newNote = { id: uuidv4(), title, text }; //make newNote with unique id
+      readAndAppend(newNote, './db/db.json'); //append newNote
+      readFromFile('./db/db.json').then((data)=> { //re-read JSON to page
         res.json(JSON.parse(data));
       })
     } else{
@@ -44,7 +44,7 @@ app.get('/api/notes', (req, res) => {
   
 );
 
-app.get('*', (req, res) => {
+app.get('*', (req, res) => { // router to handle any directory parameter and send user back to index
   res.sendFile(__dirname + '/public/index.html');
 });
 // Start the server
