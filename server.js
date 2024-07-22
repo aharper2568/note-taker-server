@@ -22,17 +22,21 @@ app.get('/notes', (req, res) => {
 
 // API Route - Get all notes
 app.get('/api/notes', (req, res) => {
-  console.info(`${req.method} request received for notes`);
+  console.info(`${req.method} request received for notes`); //confirm get method
   readFromFile('./db/db.json').then((data) => {
-    console.log(data)
+    console.log(data) 
     res.json(JSON.parse(data))})
   });
   
   app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request received for notes`);
     const { title, text } = req.body;
-    if (req.body) {
+    if (req.body) { 
       const newNote = { id: uuidv4(), title, text };
-      readAndAppend(newNote, './db/db.json')
+      readAndAppend(newNote, './db/db.json');
+      readFromFile('./db/db.json').then((data)=> {
+        res.json(JSON.parse(data));
+      })
     } else{
       res.error('error adding note')
     }
